@@ -10,6 +10,7 @@ import (
 	"log"
 	"net"
 	"os"
+	"path/filepath"
 	"sync"
 	"time"
 )
@@ -82,6 +83,10 @@ func (r *Recorder) Save(file string) (*os.File, error) {
 
 	if file == "" {
 		file = fmt.Sprintf(internal.OutFileFormat, time.Now().Unix())
+	}
+
+	if err := os.MkdirAll(filepath.Dir(file), 0770); err != nil {
+		return nil, err
 	}
 
 	f, err := os.Create(file)
