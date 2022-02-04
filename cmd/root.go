@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	"github.com/racing-telemetry/f1-dump/pkg/opts"
 	"github.com/spf13/cobra"
 	"os"
 )
@@ -15,4 +16,10 @@ func Execute() {
 	if err := rootCmd.Execute(); err != nil {
 		os.Exit(1)
 	}
+}
+
+func init() {
+	rootCmd.CompletionOptions.DisableDefaultCmd = true
+
+	rootCmd.PersistentFlags().BoolVarP(&opts.Verbose, "verbose", "v", false, "verbose output")
 }

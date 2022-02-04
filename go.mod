@@ -3,7 +3,7 @@ module github.com/racing-telemetry/f1-dump
 go 1.17
 
 require (
-	github.com/pkg/errors v0.8.1
+	github.com/dustin/go-humanize v1.0.0
 	github.com/spf13/cobra v1.3.0
 )
 
