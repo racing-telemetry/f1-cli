@@ -9,6 +9,7 @@ import (
 	"io"
 	"net"
 	"os"
+	"time"
 )
 
 type Broadcaster struct {
@@ -48,6 +49,7 @@ func (b *Broadcaster) Start(file string) error {
 	defer f.Close()
 
 	offset := int64(0)
+	t := 0
 	for {
 		select {
 		case <-b.ctx.Done():
@@ -69,6 +71,19 @@ func (b *Broadcaster) Start(file string) error {
 		}
 
 		offset += int64(n)
+
+		header := new(udp.Header)
+		if header.Read(buf) != nil {
+			if opts.Verbose {
+				printer.PrintError("header read error: %s", err.Error())
+			}
+		}
+
+		d := int(header.SessionTime * 100000)
+		if d != t {
+			time.Sleep(time.Nanosecond * time.Duration(d))
+			t = d
+		}
 
 		err = b.serv.WriteSocket(buf)
 		if err != nil {
