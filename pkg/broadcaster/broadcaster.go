@@ -40,7 +40,7 @@ func newBroadcaster(serv *udp.Server) *Broadcaster {
 	}
 }
 
-func (b *Broadcaster) Start(file string) error {
+func (b *Broadcaster) Start(file string, instant bool) error {
 	f, err := os.Open(file)
 	if err != nil {
 		return err
@@ -72,17 +72,19 @@ func (b *Broadcaster) Start(file string) error {
 
 		offset += int64(n)
 
-		header := new(udp.Header)
-		if header.Read(buf) != nil {
-			if opts.Verbose {
-				printer.PrintError("header read error: %s", err.Error())
+		if !instant {
+			header := new(udp.Header)
+			if header.Read(buf) != nil {
+				if opts.Verbose {
+					printer.PrintError("header read error: %s", err.Error())
+				}
 			}
-		}
 
-		d := int(header.SessionTime * 100000)
-		if d != t {
-			time.Sleep(time.Nanosecond * time.Duration(d))
-			t = d
+			d := int(header.SessionTime * 100000)
+			if d != t {
+				time.Sleep(time.Nanosecond * time.Duration(d))
+				t = d
+			}
 		}
 
 		err = b.serv.WriteSocket(buf)

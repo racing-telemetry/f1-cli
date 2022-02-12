@@ -16,6 +16,7 @@ var broadcastCmd = &cobra.Command{
 	Long:         `Start broadcasting`,
 	SilenceUsage: true,
 	RunE: func(cmd *cobra.Command, args []string) error {
+		instant, _ := cmd.Flags().GetBool("instant")
 		flags, err := buildFlags(cmd)
 		if err != nil {
 			return printer.Error(err)
@@ -40,7 +41,7 @@ var broadcastCmd = &cobra.Command{
 		}()
 
 		printer.Print(emoji.Sparkless, "Broadcast started at %s:%d, press Ctrl+C to stop", flags.host, flags.port)
-		err = b.Start(flags.file)
+		err = b.Start(flags.file, instant)
 		if err != nil {
 			return printer.Error(err)
 		}
@@ -54,6 +55,8 @@ var broadcastCmd = &cobra.Command{
 
 func init() {
 	addFlags(broadcastCmd)
+
+	broadcastCmd.Flags().BoolP("instant", "i", false, "Broadcast all packets instantly. (Not Thread Safe)")
 
 	rootCmd.AddCommand(broadcastCmd)
 }
