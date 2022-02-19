@@ -4,11 +4,12 @@ import (
 	"bytes"
 	"context"
 	"fmt"
+	"github.com/racing-telemetry/f1-dump/cmd/flags"
 	"github.com/racing-telemetry/f1-dump/internal"
+	"github.com/racing-telemetry/f1-dump/internal/text/printer"
 	"github.com/racing-telemetry/f1-dump/internal/udp"
 	"github.com/racing-telemetry/f1-dump/pkg/opts"
 	"log"
-	"net"
 	"os"
 	"path/filepath"
 	"sync"
@@ -24,30 +25,33 @@ type Recorder struct {
 	ctx  context.Context
 	stop context.CancelFunc
 
+	flags *flags.Flags
 	Stats *udp.Counter
 }
 
-func NewRecorder(addr *net.UDPAddr) (*Recorder, error) {
-	serv, err := udp.Serve(addr)
+func NewRecorder(flags *flags.Flags) (*Recorder, error) {
+	serv, err := udp.Serve(flags.UDPAddr())
 	if err != nil {
 		return nil, err
 	}
 
-	return newRecorder(serv), nil
+	return newRecorder(flags, serv), nil
 }
 
-func newRecorder(serv *udp.Client) *Recorder {
+func newRecorder(flags *flags.Flags, serv *udp.Client) *Recorder {
 	ctx, fn := context.WithCancel(context.Background())
 	return &Recorder{
 		Stats: new(udp.Counter),
 		buf:   new(bytes.Buffer),
 		serv:  serv,
+		flags: flags,
 		ctx:   ctx,
 		stop:  fn,
 	}
 }
 
 func (r *Recorder) Start() {
+	hasAnyPacketIgnored := len(r.flags.Packs) != 0
 	for {
 		select {
 		case <-r.ctx.Done():
@@ -65,6 +69,20 @@ func (r *Recorder) Start() {
 			continue
 		}
 
+		if hasAnyPacketIgnored {
+			header := new(udp.Header)
+			if header.Read(buf) != nil {
+				if opts.Verbose {
+					printer.PrintError("header read error: %s", err.Error())
+				}
+			}
+
+			if r.flags.Packs.IsIgnored(int(header.PacketID)) {
+				r.Stats.IncIgnored()
+				continue
+			}
+		}
+
 		r.Stats.IncRecv()
 
 		r.buf.Grow(internal.BufferSize)
@@ -76,11 +94,12 @@ func (r *Recorder) Stop() {
 	r.stop()
 }
 
-func (r *Recorder) Save(file string) (*os.File, error) {
+func (r *Recorder) Save() (*os.File, error) {
 	if r.buf.Len() == 0 {
 		return nil, fmt.Errorf("no data found to save")
 	}
 
+	file := r.flags.File
 	if file == "" {
 		file = fmt.Sprintf(internal.OutFileFormat, time.Now().Unix())
 	}

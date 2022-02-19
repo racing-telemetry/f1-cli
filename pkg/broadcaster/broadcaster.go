@@ -2,12 +2,12 @@ package broadcaster
 
 import (
 	"context"
+	"github.com/racing-telemetry/f1-dump/cmd/flags"
 	"github.com/racing-telemetry/f1-dump/internal"
 	"github.com/racing-telemetry/f1-dump/internal/text/printer"
 	"github.com/racing-telemetry/f1-dump/internal/udp"
 	"github.com/racing-telemetry/f1-dump/pkg/opts"
 	"io"
-	"net"
 	"os"
 	"time"
 )
@@ -18,35 +18,39 @@ type Broadcaster struct {
 	ctx  context.Context
 	stop context.CancelFunc
 
+	flags *flags.Flags
 	Stats *udp.Counter
 }
 
-func NewBroadcaster(addr *net.UDPAddr) (*Broadcaster, error) {
-	serv, err := udp.Dial(addr)
+func NewBroadcaster(flags *flags.Flags) (*Broadcaster, error) {
+	serv, err := udp.Dial(flags.UDPAddr())
 	if err != nil {
 		return nil, err
 	}
 
-	return newBroadcaster(serv), nil
+	return newBroadcaster(flags, serv), nil
 }
 
-func newBroadcaster(serv *udp.Server) *Broadcaster {
+func newBroadcaster(flags *flags.Flags, serv *udp.Server) *Broadcaster {
 	ctx, fn := context.WithCancel(context.Background())
 	return &Broadcaster{
 		serv:  serv,
+		flags: flags,
 		ctx:   ctx,
 		stop:  fn,
 		Stats: new(udp.Counter),
 	}
 }
 
-func (b *Broadcaster) Start(file string, instant bool) error {
-	f, err := os.Open(file)
+func (b *Broadcaster) Start(instant bool) error {
+	f, err := os.Open(b.flags.File)
 	if err != nil {
 		return err
 	}
 
 	defer f.Close()
+
+	hasAnyPacketIgnored := len(b.flags.Packs) != 0
 
 	offset := int64(0)
 	t := 0
@@ -72,14 +76,21 @@ func (b *Broadcaster) Start(file string, instant bool) error {
 
 		offset += int64(n)
 
-		if !instant {
-			header := new(udp.Header)
-			if header.Read(buf) != nil {
-				if opts.Verbose {
-					printer.PrintError("header read error: %s", err.Error())
-				}
+		header := new(udp.Header)
+		if header.Read(buf) != nil {
+			if opts.Verbose {
+				printer.PrintError("header read error: %s", err.Error())
 			}
+		}
 
+		if hasAnyPacketIgnored {
+			if b.flags.Packs.IsIgnored(int(header.PacketID)) {
+				b.Stats.IncIgnored()
+				continue
+			}
+		}
+
+		if !instant {
 			d := int(header.SessionTime * 100000)
 			if d != t {
 				time.Sleep(time.Nanosecond * time.Duration(d))

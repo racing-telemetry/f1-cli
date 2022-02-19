@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	"github.com/racing-telemetry/f1-dump/cmd/flags"
 	"github.com/racing-telemetry/f1-dump/internal/text/emoji"
 	"github.com/racing-telemetry/f1-dump/internal/text/printer"
 	"github.com/racing-telemetry/f1-dump/pkg/broadcaster"
@@ -17,12 +18,12 @@ var broadcastCmd = &cobra.Command{
 	SilenceUsage: true,
 	RunE: func(cmd *cobra.Command, args []string) error {
 		instant, _ := cmd.Flags().GetBool("instant")
-		flags, err := buildFlags(cmd)
+		flags, err := flags.Build(cmd)
 		if err != nil {
 			return printer.Error(err)
 		}
 
-		b, err := broadcaster.NewBroadcaster(flags.UDPAddr())
+		b, err := broadcaster.NewBroadcaster(flags)
 		if err != nil {
 			return printer.Error(err)
 		}
@@ -40,21 +41,25 @@ var broadcastCmd = &cobra.Command{
 			os.Exit(0)
 		}()
 
-		printer.Print(emoji.Sparkless, "Broadcast started at %s:%d, press Ctrl+C to stop", flags.host, flags.port)
-		err = b.Start(flags.file, instant)
+		if len(flags.Packs) != 0 {
+			printer.Print(emoji.RoundPushpin, "These packets are being ignored: %s", flags.Packs.Pretty())
+		}
+
+		printer.Print(emoji.Sparkless, "Broadcast started at %s:%d, press Ctrl+C to stop", flags.Host, flags.Port)
+		err = b.Start(instant)
 		if err != nil {
 			return printer.Error(err)
 		}
 
 		b.Stop()
-		printer.Print(emoji.Rocket, "%d packs have been published", b.Stats.RecvCount())
+		printer.Print(emoji.Rocket, "%d packet have been published", b.Stats.RecvCount())
 
 		return nil
 	},
 }
 
 func init() {
-	addFlags(broadcastCmd)
+	flags.Add(broadcastCmd)
 
 	broadcastCmd.Flags().BoolP("instant", "i", false, "Broadcast all packets instantly. (Not Thread Safe)")
 

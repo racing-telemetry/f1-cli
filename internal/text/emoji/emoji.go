@@ -9,4 +9,5 @@ const (
 	File         Emoji = '📁'
 	Construction Emoji = '🚧'
 	Rocket       Emoji = '🚀'
+	RoundPushpin Emoji = '📍'
 )

@@ -6,11 +6,11 @@ import (
 )
 
 func Print(emoji emoji.Emoji, s string, a ...interface{}) {
-	fmt.Printf("\r%s %s\n", string(emoji), fmt.Sprintf(s, a...))
+	fmt.Printf("\r%c %s\n", emoji, fmt.Sprintf(s, a...))
 }
 
 func Error(err error) error {
-	return fmt.Errorf("\r%s Error: %s", string(emoji.Boom), err.Error())
+	return fmt.Errorf("\r%c Error: %s", emoji.Boom, err.Error())
 }
 
 func PrintError(format string, a ...interface{}) {

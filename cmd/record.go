@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"github.com/dustin/go-humanize"
+	"github.com/racing-telemetry/f1-dump/cmd/flags"
 	"github.com/racing-telemetry/f1-dump/internal/text/emoji"
 	"github.com/racing-telemetry/f1-dump/internal/text/printer"
 	"github.com/racing-telemetry/f1-dump/pkg/recorder"
@@ -19,12 +20,12 @@ var cmdRecord = &cobra.Command{
 	Long:         `Start recording packets from UDP source.`,
 	SilenceUsage: true,
 	RunE: func(cmd *cobra.Command, args []string) error {
-		flags, err := buildFlags(cmd)
+		flags, err := flags.Build(cmd)
 		if err != nil {
 			return printer.Error(err)
 		}
 
-		rc, err := recorder.NewRecorder(flags.UDPAddr())
+		rc, err := recorder.NewRecorder(flags)
 		if err != nil {
 			return fmt.Errorf("%s\n%s", printer.Error(errors.New("recorder can't create")), printer.Error(err))
 		}
@@ -38,7 +39,7 @@ var cmdRecord = &cobra.Command{
 
 			rc.Stop()
 
-			f, err := rc.Save(flags.file)
+			f, err := rc.Save()
 			if err != nil {
 				printer.PrintError(err.Error())
 			} else {
@@ -61,7 +62,11 @@ var cmdRecord = &cobra.Command{
 			os.Exit(0)
 		}()
 
-		printer.Print(emoji.Sparkless, "Record started at %s:%d, press Ctrl+C to stop", flags.host, flags.port)
+		if len(flags.Packs) != 0 {
+			printer.Print(emoji.RoundPushpin, "These packets are being ignored: %s", flags.Packs.Pretty())
+		}
+
+		printer.Print(emoji.Sparkless, "Record started at %s:%d, press Ctrl+C to stop", flags.Host, flags.Port)
 		rc.Start()
 
 		return nil
@@ -69,7 +74,7 @@ var cmdRecord = &cobra.Command{
 }
 
 func init() {
-	addFlags(cmdRecord)
+	flags.Add(cmdRecord)
 
 	rootCmd.AddCommand(cmdRecord)
 }
