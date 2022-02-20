@@ -1,12 +1,12 @@
-package broadcaster
+package stream
 
 import (
 	"context"
 	"github.com/racing-telemetry/f1-dump/cmd/flags"
 	"github.com/racing-telemetry/f1-dump/internal"
+	"github.com/racing-telemetry/f1-dump/internal/opts"
 	"github.com/racing-telemetry/f1-dump/internal/text/printer"
 	"github.com/racing-telemetry/f1-dump/internal/udp"
-	"github.com/racing-telemetry/f1-dump/pkg/opts"
 	"io"
 	"os"
 	"time"

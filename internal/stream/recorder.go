@@ -1,4 +1,4 @@
-package recorder
+package stream
 
 import (
 	"bytes"
@@ -6,9 +6,9 @@ import (
 	"fmt"
 	"github.com/racing-telemetry/f1-dump/cmd/flags"
 	"github.com/racing-telemetry/f1-dump/internal"
+	"github.com/racing-telemetry/f1-dump/internal/opts"
 	"github.com/racing-telemetry/f1-dump/internal/text/printer"
 	"github.com/racing-telemetry/f1-dump/internal/udp"
-	"github.com/racing-telemetry/f1-dump/pkg/opts"
 	"log"
 	"os"
 	"path/filepath"

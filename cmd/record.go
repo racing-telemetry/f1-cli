@@ -5,9 +5,9 @@ import (
 	"fmt"
 	"github.com/dustin/go-humanize"
 	"github.com/racing-telemetry/f1-dump/cmd/flags"
+	"github.com/racing-telemetry/f1-dump/internal/stream"
 	"github.com/racing-telemetry/f1-dump/internal/text/emoji"
 	"github.com/racing-telemetry/f1-dump/internal/text/printer"
-	"github.com/racing-telemetry/f1-dump/pkg/recorder"
 	"github.com/spf13/cobra"
 	"os"
 	"os/signal"
@@ -25,7 +25,7 @@ var cmdRecord = &cobra.Command{
 			return printer.Error(err)
 		}
 
-		rc, err := recorder.NewRecorder(flags)
+		rc, err := stream.NewRecorder(flags)
 		if err != nil {
 			return fmt.Errorf("%s\n%s", printer.Error(errors.New("recorder can't create")), printer.Error(err))
 		}

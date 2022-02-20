@@ -1,7 +1,7 @@
 package cmd
 
 import (
-	"github.com/racing-telemetry/f1-dump/pkg/opts"
+	"github.com/racing-telemetry/f1-dump/internal/opts"
 	"github.com/spf13/cobra"
 	"os"
 )

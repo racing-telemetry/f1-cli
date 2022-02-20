@@ -2,9 +2,9 @@ package cmd
 
 import (
 	"github.com/racing-telemetry/f1-dump/cmd/flags"
+	"github.com/racing-telemetry/f1-dump/internal/stream"
 	"github.com/racing-telemetry/f1-dump/internal/text/emoji"
 	"github.com/racing-telemetry/f1-dump/internal/text/printer"
-	"github.com/racing-telemetry/f1-dump/pkg/broadcaster"
 	"github.com/spf13/cobra"
 	"os"
 	"os/signal"
@@ -23,7 +23,7 @@ var broadcastCmd = &cobra.Command{
 			return printer.Error(err)
 		}
 
-		b, err := broadcaster.NewBroadcaster(flags)
+		b, err := stream.NewBroadcaster(flags)
 		if err != nil {
 			return printer.Error(err)
 		}
