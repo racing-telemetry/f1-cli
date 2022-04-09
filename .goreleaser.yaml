@@ -1,0 +1,99 @@
+project_name: f1-dump
+
+env:
+  - GO111MODULE=on
+  - CGO_ENABLED=0
+
+before:
+  hooks:
+    - go mod tidy
+    - go mod download
+
+gomod:
+  proxy: true
+
+builds:
+  - binary: f1dump
+    goos:
+      - linux
+      - darwin
+      - windows
+    goarch:
+      - "386"
+      - amd64
+      - arm
+      - arm64
+    goarm:
+      - "7"
+    mod_timestamp: '{{ .CommitTimestamp }}'
+    ldflags:
+      - -s -w -X github.com/racing-telemetry/f1-dump/internal.Version={{ .Version }} -X github.com/racing-telemetry/f1-dump/cmd.commit={{ .Commit }} -X github.com/racing-telemetry/f1-dump/cmd.date={{ .CommitDate }}
+
+universal_binaries:
+  - replace: false
+
+checksum:
+  name_template: "{{ .ProjectName }}_checksums.txt"
+
+changelog:
+  sort: asc
+  use: github
+  filters:
+    exclude:
+      - '^docs:'
+      - '^test:'
+      - '^chore'
+      - Merge pull request
+      - Merge remote-tracking branch
+      - Merge branch
+      - go mod tidy
+  groups:
+    - title: 'New Features'
+      regexp: "^.*feat[(\\w)]*:+.*$"
+      order: 0
+    - title: 'Bug fixes'
+      regexp: "^.*fix[(\\w)]*:+.*$"
+      order: 10
+    - title: Other work
+      order: 999
+
+release:
+  footer: |
+    **Full Changelog**: https://github.com/racing-telemetry/f1-dump/compare/{{ .PreviousTag }}...{{ .Tag }}
+
+archives:
+  - name_template: '{{ .ProjectName }}_{{ .Os }}_{{ .Arch }}{{ if .Arm }}v{{ .Arm }}{{ end }}'
+    replacements:
+      darwin: Darwin
+      linux: Linux
+      windows: Windows
+      386: i386
+      amd64: x86_64
+    format_overrides:
+      - goos: windows
+        format: zip
+    files:
+      - completions/*
+
+snapshot:
+  name_template: '{{ incpatch .Version }}-next'
+
+brews:
+  - tap:
+      owner: racing-telemetry
+      name: homebrew-tap
+    folder: Formula
+    goarm: "7"
+    homepage: https://github.com/racing-telemetry
+    description: UDP Data Dumper for Formula 1 game
+    license: Apache
+    test: |
+      system "#{bin}/f1dump version"
+    dependencies:
+      - name: go
+        type: optional
+    install: |-
+      bin.install "f1dump"
+      bash_completion.install "completions/f1dump.bash" => "f1dump"
+      zsh_completion.install "completions/f1dump.zsh" => "_f1dump"
+      fish_completion.install "completions/f1dump.fish"
