@@ -3,8 +3,8 @@ package flags
 import (
 	"errors"
 	"fmt"
-	"github.com/racing-telemetry/f1-dump/internal"
-	"github.com/racing-telemetry/f1-dump/internal/packets"
+	"github.com/racing-telemetry/f1-cli/internal"
+	"github.com/racing-telemetry/f1-cli/internal/packets"
 	"github.com/spf13/cobra"
 	"net"
 	"os"

@@ -3,8 +3,8 @@ package cmd
 import (
 	ui "github.com/gizak/termui/v3"
 	"github.com/gizak/termui/v3/widgets"
-	"github.com/racing-telemetry/f1-dump/internal/packets"
-	"github.com/racing-telemetry/f1-dump/internal/text/printer"
+	"github.com/racing-telemetry/f1-cli/internal/packets"
+	"github.com/racing-telemetry/f1-cli/internal/text/printer"
 	"github.com/spf13/cobra"
 )
 

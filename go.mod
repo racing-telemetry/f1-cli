@@ -1,4 +1,4 @@
-module github.com/racing-telemetry/f1-dump
+module github.com/racing-telemetry/f1-cli
 
 go 1.17
 

@@ -2,7 +2,7 @@ package printer
 
 import (
 	"fmt"
-	"github.com/racing-telemetry/f1-dump/internal/text/emoji"
+	"github.com/racing-telemetry/f1-cli/internal/text/emoji"
 )
 
 func Print(emoji emoji.Emoji, s string, a ...interface{}) {

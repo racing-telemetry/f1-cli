@@ -1,10 +1,10 @@
 package cmd
 
 import (
-	"github.com/racing-telemetry/f1-dump/cmd/flags"
-	"github.com/racing-telemetry/f1-dump/internal/stream"
-	"github.com/racing-telemetry/f1-dump/internal/text/emoji"
-	"github.com/racing-telemetry/f1-dump/internal/text/printer"
+	"github.com/racing-telemetry/f1-cli/cmd/flags"
+	"github.com/racing-telemetry/f1-cli/internal/stream"
+	"github.com/racing-telemetry/f1-cli/internal/text/emoji"
+	"github.com/racing-telemetry/f1-cli/internal/text/printer"
 	"github.com/spf13/cobra"
 	"os"
 	"os/signal"

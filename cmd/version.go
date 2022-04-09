@@ -4,8 +4,8 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"github.com/racing-telemetry/f1-dump/internal"
-	"github.com/racing-telemetry/f1-dump/internal/text/printer"
+	"github.com/racing-telemetry/f1-cli/internal"
+	"github.com/racing-telemetry/f1-cli/internal/text/printer"
 	"github.com/spf13/cobra"
 	"runtime"
 )

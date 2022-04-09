@@ -1,7 +1,7 @@
 package udp
 
 import (
-	"github.com/racing-telemetry/f1-dump/internal"
+	"github.com/racing-telemetry/f1-cli/internal"
 	"net"
 )
 

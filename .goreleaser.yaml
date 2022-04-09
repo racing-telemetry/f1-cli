@@ -1,4 +1,4 @@
-project_name: f1-dump
+project_name: f1-cli
 
 env:
   - GO111MODULE=on
@@ -13,7 +13,7 @@ gomod:
   proxy: true
 
 builds:
-  - binary: f1dump
+  - binary: f1
     goos:
       - linux
       - darwin
@@ -27,7 +27,7 @@ builds:
       - "7"
     mod_timestamp: '{{ .CommitTimestamp }}'
     ldflags:
-      - -s -w -X github.com/racing-telemetry/f1-dump/internal.Version={{ .Version }} -X github.com/racing-telemetry/f1-dump/cmd.commit={{ .Commit }} -X github.com/racing-telemetry/f1-dump/cmd.date={{ .CommitDate }}
+      - -s -w -X github.com/racing-telemetry/f1-cli/internal.Version={{ .Version }} -X github.com/racing-telemetry/f1-cli/cmd.commit={{ .Commit }} -X github.com/racing-telemetry/f1-cli/cmd.date={{ .CommitDate }}
 
 universal_binaries:
   - replace: false
@@ -59,7 +59,7 @@ changelog:
 
 release:
   footer: |
-    **Full Changelog**: https://github.com/racing-telemetry/f1-dump/compare/{{ .PreviousTag }}...{{ .Tag }}
+    **Full Changelog**: https://github.com/racing-telemetry/f1-cli/compare/{{ .PreviousTag }}...{{ .Tag }}
 
 archives:
   - name_template: '{{ .ProjectName }}_{{ .Os }}_{{ .Arch }}{{ if .Arm }}v{{ .Arm }}{{ end }}'
