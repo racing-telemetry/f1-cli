@@ -11,27 +11,27 @@ import (
 )
 
 var (
-	GitCommitSHA = "unknown"
-	BuildDate    = "unknown"
+	commit = "unknown"
+	date   = "unknown"
 )
 
 type CLIVersionInfo struct {
-	Version      string
-	GitCommitSHA string
-	BuildDate    string
-	GoVersion    string
-	Compiler     string
-	Platform     string
+	Version   string `json:"version"`
+	Commit    string `json:"commit"`
+	Date      string `json:"date"`
+	GoVersion string `json:"go"`
+	Compiler  string `json:"compiler"`
+	Platform  string `json:"platform"`
 }
 
 func VersionInfo() *CLIVersionInfo {
 	return &CLIVersionInfo{
-		Version:      internal.Version,
-		GitCommitSHA: GitCommitSHA,
-		BuildDate:    BuildDate,
-		GoVersion:    runtime.Version(),
-		Compiler:     runtime.Compiler,
-		Platform:     fmt.Sprintf("%s/%s", runtime.GOOS, runtime.GOARCH),
+		Version:   internal.Version,
+		Commit:    commit,
+		Date:      date,
+		GoVersion: runtime.Version(),
+		Compiler:  runtime.Compiler,
+		Platform:  fmt.Sprintf("%s/%s", runtime.GOOS, runtime.GOARCH),
 	}
 }
 
