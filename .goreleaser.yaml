@@ -88,12 +88,12 @@ brews:
     description: UDP Data Dumper for Formula 1 game
     license: Apache
     test: |
-      system "#{bin}/f1dump version"
+      system "#{bin}/f1 version"
     dependencies:
       - name: go
         type: optional
     install: |-
-      bin.install "f1dump"
-      bash_completion.install "completions/f1dump.bash" => "f1dump"
-      zsh_completion.install "completions/f1dump.zsh" => "_f1dump"
-      fish_completion.install "completions/f1dump.fish"
+      bin.install "f1"
+      bash_completion.install "completions/f1.bash" => "f1"
+      zsh_completion.install "completions/f1.zsh" => "_f1"
+      fish_completion.install "completions/f1.fish"
