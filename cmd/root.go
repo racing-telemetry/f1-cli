@@ -8,8 +8,8 @@ import (
 
 var root = &cobra.Command{
 	Use:   "f1dump",
-	Short: "Dump F1 data",
-	Long:  `A helper CLI for dumping F1 data`,
+	Short: "A helper CLI for broadcasting and recording F1 data",
+	Long:  `A helper CLI for broadcasting and recording F1 data`,
 }
 
 func Execute() {

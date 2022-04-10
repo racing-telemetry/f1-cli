@@ -16,8 +16,8 @@ import (
 
 var recordCmd = &cobra.Command{
 	Use:          "record",
-	Short:        "Start recording packets from UDP source.",
-	Long:         `Start recording packets from UDP source.`,
+	Short:        "Start recording packets from UDP source",
+	Long:         `Start recording packets from UDP source`,
 	SilenceUsage: true,
 	RunE: func(cmd *cobra.Command, args []string) error {
 		flags, err := flags.Build(cmd)

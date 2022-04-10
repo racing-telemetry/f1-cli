@@ -11,8 +11,8 @@ import (
 func init() {
 	root.AddCommand(&cobra.Command{
 		Use:          "list",
-		Short:        "List F1 packet types.",
-		Long:         "List F1 packet types.",
+		Short:        "List F1 packet types",
+		Long:         "List F1 packet types",
 		SilenceUsage: true,
 		RunE: func(cmd *cobra.Command, args []string) error {
 			if err := ui.Init(); err != nil {
