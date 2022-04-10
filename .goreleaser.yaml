@@ -8,7 +8,7 @@ before:
   hooks:
     - go mod tidy
     - go mod download
-    - ./scripts/completions.sh
+    # - ./scripts/completions.sh
 
 gomod:
   proxy: true
@@ -95,6 +95,6 @@ brews:
         type: optional
     install: |-
       bin.install "f1"
-      bash_completion.install "completions/f1.bash" => "f1"
-      zsh_completion.install "completions/f1.zsh" => "_f1"
-      fish_completion.install "completions/f1.fish"
+#     bash_completion.install "completions/f1.bash" => "f1"
+#     zsh_completion.install "completions/f1.zsh" => "_f1"
+#     fish_completion.install "completions/f1.fish"
