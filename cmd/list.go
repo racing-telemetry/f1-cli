@@ -9,7 +9,7 @@ import (
 )
 
 func init() {
-	rootCmd.AddCommand(&cobra.Command{
+	root.AddCommand(&cobra.Command{
 		Use:          "list",
 		Short:        "List F1 packet types.",
 		Long:         "List F1 packet types.",

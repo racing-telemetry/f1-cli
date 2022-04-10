@@ -14,7 +14,7 @@ import (
 	"syscall"
 )
 
-var cmdRecord = &cobra.Command{
+var recordCmd = &cobra.Command{
 	Use:          "record",
 	Short:        "Start recording packets from UDP source.",
 	Long:         `Start recording packets from UDP source.`,
@@ -74,7 +74,7 @@ var cmdRecord = &cobra.Command{
 }
 
 func init() {
-	flags.Add(cmdRecord)
+	flags.Add(recordCmd)
 
-	rootCmd.AddCommand(cmdRecord)
+	root.AddCommand(recordCmd)
 }

@@ -36,7 +36,7 @@ func VersionInfo() *CLIVersionInfo {
 }
 
 func init() {
-	rootCmd.AddCommand(&cobra.Command{
+	root.AddCommand(&cobra.Command{
 		Use:          "version",
 		Short:        "Prints the CLI version",
 		Long:         "Prints the CLI version",

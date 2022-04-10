@@ -63,5 +63,5 @@ func init() {
 
 	broadcastCmd.Flags().BoolP("instant", "i", false, "Broadcast all packets instantly. (Not Thread Safe)")
 
-	rootCmd.AddCommand(broadcastCmd)
+	root.AddCommand(broadcastCmd)
 }
