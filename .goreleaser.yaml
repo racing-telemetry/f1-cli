@@ -8,6 +8,7 @@ before:
   hooks:
     - go mod tidy
     - go mod download
+    - ./scripts/completions.sh
 
 gomod:
   proxy: true
