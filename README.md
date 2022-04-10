@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://www.ardanlabs.com/images/gopher-kart/vector-to-pixel.png"/>
+  <img src="https://user-images.githubusercontent.com/20264712/162619417-d310506e-9ed1-4453-98fa-5bf28b83abfe.png"/>
   <h3 align="center">F1 CLI</h3>
   <p align="center">A helper CLI for broadcasting and recording F1 game data</p>
   <p align="center">
