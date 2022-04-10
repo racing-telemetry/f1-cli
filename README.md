@@ -64,7 +64,7 @@ Available Commands:
   version     Prints the CLI version
 
 Flags:
-  -h, --help      help for f1dump
+  -h, --help      help for f1
   -v, --verbose   verbose output
 
 Use "f1 [command] --help" for more information about a command.

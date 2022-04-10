@@ -7,7 +7,7 @@ import (
 )
 
 var root = &cobra.Command{
-	Use:   "f1dump",
+	Use:   "f1",
 	Short: "A helper CLI for broadcasting and recording F1 data",
 	Long:  `A helper CLI for broadcasting and recording F1 data`,
 }
